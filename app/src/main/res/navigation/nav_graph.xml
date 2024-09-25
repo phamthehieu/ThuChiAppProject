@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.thuchiapp.views.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_shortsFragment2"
+            app:destination="@id/shortsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shortsFragment"
+        android:name="com.example.thuchiapp.views.ShortsFragment"
+        android:label="fragment_shorts"
+        tools:layout="@layout/fragment_shorts" >
+        <action
+            android:id="@+id/action_shortsFragment_to_subscriptionFragment"
+            app:destination="@id/subscriptionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/subscriptionFragment"
+        android:name="com.example.thuchiapp.views.SubscriptionFragment"
+        android:label="fragment_subscriptions"
+        tools:layout="@layout/fragment_subscription" >
+        <action
+            android:id="@+id/action_subscriptionFragment_to_libraryFragment"
+            app:destination="@id/libraryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/libraryFragment"
+        android:name="com.example.thuchiapp.views.LibraryFragment"
+        android:label="fragment_library"
+        tools:layout="@layout/fragment_library" />
+
+
+
+</navigation>
