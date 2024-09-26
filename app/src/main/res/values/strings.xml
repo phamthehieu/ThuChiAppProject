@@ -48,5 +48,6 @@
     <string name="vnd">VND</string>
     <string name="usd">USD</string>
     <string name="estimate">Dự chi</string>
+    <string name="limit_to_spend">Hạn mức nên chi</string>
 
 </resources>

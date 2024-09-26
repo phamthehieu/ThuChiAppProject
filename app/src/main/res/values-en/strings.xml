@@ -49,4 +49,5 @@
     <string name="vnd">VND</string>
     <string name="usd">USD</string>
     <string name="estimate">Estimate</string>
+    <string name="limit_to_spend">Limit to spend</string>
 </resources>

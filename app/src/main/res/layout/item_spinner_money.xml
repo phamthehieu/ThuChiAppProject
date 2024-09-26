@@ -12,6 +12,7 @@
         android:ellipsize="end"
         android:maxEms="30"
         android:text="VND"
+        android:textAlignment="center"
         android:textStyle="bold"
         android:textColor="@color/green"
         android:maxLines="1"

@@ -1,31 +1,35 @@
 package com.example.thuchiapp.views.splash
 
-import android.animation.ValueAnimator
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.transition.AutoTransition
-import android.transition.TransitionManager
-import android.util.Log
 import android.view.View
-import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.doOnEnd
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieDrawable
 import com.example.thuchiapp.R
+import com.example.thuchiapp.adapter.ConsumerCategoryAdapter
 import com.example.thuchiapp.adapter.MoneySpinnerAdapter
 import com.example.thuchiapp.data.NameMoneyItem
 import com.example.thuchiapp.databinding.ActivityPendingJarsStartBinding
+import com.example.thuchiapp.entity.PendingJars
+import com.example.thuchiapp.viewModel.PendingJarsAmountViewModel
 import com.example.thuchiapp.viewModel.PendingJarsViewModel
 import com.example.thuchiapp.viewModel.PendingJarsViewModelFactory
 import com.example.thuchiapp.views.component.KeyBoardBottomSheetFragment
 import com.example.thuchiapp.views.customs.AnimationUtils
 
-class PendingJarsStartActivity : AppCompatActivity(), KeyBoardBottomSheetFragment.OnCalculationCompleteListener {
+class PendingJarsStartActivity : AppCompatActivity(),
+    KeyBoardBottomSheetFragment.OnCalculationCompleteListener {
 
     private lateinit var binding: ActivityPendingJarsStartBinding
     private lateinit var adapter: MoneySpinnerAdapter
     private var total: String = ""
+    private lateinit var pendingJarsAmountViewModel: PendingJarsAmountViewModel
+    private val listPendingJars: MutableList<PendingJars> = mutableListOf()
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var language: String
 
     private val pendingJarsViewModel: PendingJarsViewModel by viewModels {
         PendingJarsViewModelFactory(application)
@@ -35,16 +39,38 @@ class PendingJarsStartActivity : AppCompatActivity(), KeyBoardBottomSheetFragmen
         super.onCreate(savedInstanceState)
         binding = ActivityPendingJarsStartBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.recyclerViewHome.visibility = View.GONE
+
+        pendingJarsAmountViewModel = ViewModelProvider(this)[PendingJarsAmountViewModel::class.java]
+
+        sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        language = sharedPreferences.getString("AppLanguage", "vi") ?: "vi"
 
         setupLottieAnimation()
         setupSpinner()
         setupLayout()
-        setRecyclerView()
+        getDataSource()
     }
 
-    private fun setRecyclerView() {
+    private fun setRecyclerView(totalWithoutDots: String) {
+        val recyclerView = binding.recyclerViewHome
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        pendingJarsAmountViewModel.setPendingJars(listPendingJars)
+        pendingJarsAmountViewModel.updateAmounts(totalWithoutDots.toDouble())
+
+        pendingJarsAmountViewModel.allPendingJars.observe(this) { updatedPendingJars ->
+            updatedPendingJars?.let {
+                val adapter = ConsumerCategoryAdapter(it, totalWithoutDots, language)
+                recyclerView.adapter = adapter
+            }
+        }
+    }
+
+    private fun getDataSource() {
         pendingJarsViewModel.allPendingJars.observe(this) { pendingJars ->
-            Log.d("Hieu35", "PendingJars: $pendingJars")
+            val spendingJars = pendingJars.filter { jar -> jar.type == "Spending" }
+            listPendingJars.addAll(spendingJars)
         }
     }
 
@@ -81,9 +107,10 @@ class PendingJarsStartActivity : AppCompatActivity(), KeyBoardBottomSheetFragmen
             NameMoneyItem(R.string.vnd),
             NameMoneyItem(R.string.usd)
         )
-
         adapter = MoneySpinnerAdapter(this, items)
         binding.spinnerOnboarding.adapter = adapter
+
+        binding.spinnerOnboarding.setSelection(if (language == "vi") 0 else 1)
     }
 
     override fun onCalculationComplete(result: String) {
@@ -101,12 +128,15 @@ class PendingJarsStartActivity : AppCompatActivity(), KeyBoardBottomSheetFragmen
         val totalValue = totalWithoutDots.toIntOrNull()
 
         if (totalValue != null && totalValue > 0) {
-            if (binding.layoutSlogan.visibility == View.VISIBLE) {
+            setRecyclerView(totalWithoutDots)
+            if (binding.layoutSlogan.visibility == View.VISIBLE && binding.recyclerViewHome.visibility == View.GONE) {
                 AnimationUtils.collapseLayout(binding.layoutSlogan)
+                AnimationUtils.expandLayout(binding.recyclerViewHome)
             }
         } else {
-            if (binding.layoutSlogan.visibility == View.GONE) {
+            if (binding.layoutSlogan.visibility == View.GONE && binding.recyclerViewHome.visibility == View.VISIBLE) {
                 AnimationUtils.expandLayout(binding.layoutSlogan)
+                AnimationUtils.collapseLayout(binding.recyclerViewHome)
             }
         }
     }

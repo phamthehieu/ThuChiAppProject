@@ -258,7 +258,7 @@
                 android:padding="10dp"
                 android:text="@string/finished"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

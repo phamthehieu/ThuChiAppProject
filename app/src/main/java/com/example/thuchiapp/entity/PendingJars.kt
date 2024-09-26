@@ -9,5 +9,6 @@ data class PendingJars(
     val title: String,
     val amount: String,
     val iconResource: Int,
-    val type: String
+    val type: String,
+    val percent: Int
     )
