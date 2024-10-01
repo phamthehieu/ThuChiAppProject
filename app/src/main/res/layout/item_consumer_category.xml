@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="20dp">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/icon"
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title_section"
-                android:layout_marginStart="20dp"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -87,11 +87,9 @@
                         android:id="@+id/seek_bar"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="0dp"
-                        android:layout_height="10dp"
+                        android:layout_height="20dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
                         android:max="100"
-                        android:progress="0"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -99,18 +97,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/percent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:text="100"
-                    android:gravity="center"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/green"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -124,6 +110,7 @@
         android:layout_below="@+id/layoutCardView"
         android:layout_marginStart="20dp"
         android:layout_marginTop="-20dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/background_gray"
         android:baselineAligned="false"
@@ -143,16 +130,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/limit_to_spend"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="#838181"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/daily_limit_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -165,20 +144,12 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/remaining_days_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@android:color/darker_gray"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/remaining_days_value"
+                android:id="@+id/daily_limit_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 

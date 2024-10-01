@@ -1,25 +1,39 @@
 package com.example.thuchiapp.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.thuchiapp.entity.PendingJars
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PendingJarsAmountViewModel : ViewModel() {
     private val _allPendingJars = MutableLiveData<List<PendingJars>?>()
-    val allPendingJars: MutableLiveData<List<PendingJars>?> = _allPendingJars
+    val allPendingJars: LiveData<List<PendingJars>?> get() = _allPendingJars
 
-    // Hàm tính toán và cập nhật amount
+    // Hàm cập nhật danh sách với amount và percent mới
     fun updateAmounts(total: Double) {
         val updatedPendingJars = _allPendingJars.value?.map { jar ->
-            val percentValue = jar.percent ?: 0  // Nếu percent là null thì gán 0
-            val calculatedAmount = (total * percentValue / 100).toString()  // Tính toán với percent
-            jar.copy(amount = calculatedAmount)  // Tạo bản sao của PendingJar với amount mới
+            val percentValue = jar.percent ?: 0
+            val calculatedAmount = (total * percentValue / 100).toString()
+            jar.copy(amount = calculatedAmount)
         }
-        _allPendingJars.value = updatedPendingJars  // Cập nhật lại giá trị của LiveData
+        _allPendingJars.value = updatedPendingJars
     }
 
-    // Set danh sách PendingJars
+    // Đặt danh sách PendingJars
     fun setPendingJars(pendingJars: List<PendingJars>) {
         _allPendingJars.value = pendingJars
     }
+
+    // Cập nhật percent và amount theo vị trí
+    fun updatePercentAtPosition(position: Int, newAmount: Double) {
+        val updatedPendingJars = _allPendingJars.value?.toMutableList()?.apply {
+            val jar = this[position]
+            this[position] = jar.copy(amount = newAmount.toString())
+        }
+        _allPendingJars.value = updatedPendingJars
+    }
 }
+

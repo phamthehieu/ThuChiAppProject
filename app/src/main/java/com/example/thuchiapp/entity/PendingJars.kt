@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class PendingJars(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
-    val amount: String,
+    var amount: String,
     val iconResource: Int,
     val type: String,
-    val percent: Int
+    var percent: Int
     )

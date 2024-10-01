@@ -3,6 +3,7 @@ package com.example.thuchiapp.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.thuchiapp.entity.PendingJars
 import kotlinx.coroutines.flow.Flow
 
@@ -14,4 +15,7 @@ interface PendingJarsDao {
 
     @Insert
     fun insertPendingJars(pendingJars: List<PendingJars>)
+
+    @Update
+    fun updatePendingJars(pendingJars: List<PendingJars>)
 }
