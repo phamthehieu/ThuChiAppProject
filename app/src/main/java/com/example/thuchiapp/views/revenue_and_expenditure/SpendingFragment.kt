@@ -5,10 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.thuchiapp.R
+import androidx.fragment.app.viewModels
 import com.example.thuchiapp.databinding.FragmentSpendingBinding
+import com.example.thuchiapp.viewModel.SubcategoriesViewModel
+import com.example.thuchiapp.viewModel.SubcategoriesViewModelFactory
 
 class SpendingFragment : Fragment() {
+
+    private val subcategories: SubcategoriesViewModel  by viewModels {
+        SubcategoriesViewModelFactory(requireActivity().application)
+    }
 
     private lateinit var binding: FragmentSpendingBinding
 

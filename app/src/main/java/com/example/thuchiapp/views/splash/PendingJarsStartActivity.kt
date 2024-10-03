@@ -69,7 +69,6 @@ class PendingJarsStartActivity : AppCompatActivity(),
 
         pendingJarsAmountViewModel.allPendingJars.observe(this) { updatedPendingJars ->
             updatedPendingJars?.let {
-                listPendingJars.clear()
                 listPendingJars.addAll(it)
                 val adapter = ConsumerCategoryAdapter(
                     it,
@@ -178,11 +177,6 @@ class PendingJarsStartActivity : AppCompatActivity(),
             if (binding.layoutSlogan.visibility == View.VISIBLE && binding.recyclerViewHome.visibility == View.GONE) {
                 AnimationUtils.collapseLayout(binding.layoutSlogan)
                 AnimationUtils.expandLayout(binding.recyclerViewHome)
-            }
-        } else {
-            if (binding.layoutSlogan.visibility == View.GONE && binding.recyclerViewHome.visibility == View.VISIBLE) {
-                AnimationUtils.expandLayout(binding.layoutSlogan)
-                AnimationUtils.collapseLayout(binding.recyclerViewHome)
             }
         }
     }

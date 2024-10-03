@@ -10,5 +10,6 @@ data class PendingJars(
     var amount: String,
     val iconResource: Int,
     val type: String,
-    var percent: Int
+    var percent: Int,
+    val order: Int,
     )
