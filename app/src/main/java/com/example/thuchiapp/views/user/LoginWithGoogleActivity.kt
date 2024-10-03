@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.thuchiapp.R
+import com.example.thuchiapp.controller.UserController
 import com.example.thuchiapp.databinding.ActivityLoginWithGoogleBinding
 import com.example.thuchiapp.views.splash.PendingJarsStartActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -24,11 +25,15 @@ class LoginWithGoogleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginWithGoogleBinding
     private val RC_SIGN_IN = 9001
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var userController: UserController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginWithGoogleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val sharedPreferences = this.getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        userController = UserController(sharedPreferences)
 
         configureGoogleSignIn()
         setupViews()
@@ -66,6 +71,7 @@ class LoginWithGoogleActivity : AppCompatActivity() {
                         val driveService = getDriveService()
                         if (driveService != null) {
 //                            DatabaseSyncHelper.downloadAndRestoreDatabase(driveService, this@LoginWithGoogleActivity)
+                            userController.login(account)
                             val intent = Intent(this@LoginWithGoogleActivity, PendingJarsStartActivity::class.java)
                             startActivity(intent)
                         } else {

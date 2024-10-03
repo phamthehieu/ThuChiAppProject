@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.2"
+alerter = "7.2.4"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -17,6 +18,7 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.0.0"
 
 [libraries]
+alerter = { module = "com.github.tapadoo:alerter", version.ref = "alerter" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleLivedataKtx" }

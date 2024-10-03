@@ -16,6 +16,7 @@ import com.example.thuchiapp.viewModel.PendingJarsViewModel
 import com.example.thuchiapp.viewModel.PendingJarsViewModelFactory
 import com.example.thuchiapp.views.splash.PendingJarsStartActivity
 import com.example.thuchiapp.views.user.LoginWithGoogleActivity
+import com.tapadoo.alerter.Alerter
 import java.util.Locale
 
 class OnboardingActivity : AppCompatActivity() {
@@ -55,7 +56,7 @@ class OnboardingActivity : AppCompatActivity() {
         setupSpinner()
 
         binding.btnStart.setOnClickListener {
-            val intent = Intent(this, PendingJarsStartActivity::class.java)
+            val intent = Intent(this, LoginWithGoogleActivity::class.java)
             startActivity(intent)
             finish()
         }

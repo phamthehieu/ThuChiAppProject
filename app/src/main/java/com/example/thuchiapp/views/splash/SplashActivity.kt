@@ -55,17 +55,17 @@ class SplashActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(animation: Animator) {
                 val account = GoogleSignIn.getLastSignedInAccount(this@SplashActivity)
-//                if (account != null) {
-//                    userController.login(account)
-//
-//                    val intent = Intent(this@SplashActivity, MainActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
-//                } else {
+                if (account != null) {
+                    userController.login(account)
+
+                    val intent = Intent(this@SplashActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
                     val intent = Intent(this@SplashActivity, OnboardingActivity::class.java)
                     startActivity(intent)
                     finish()
-//                }
+               }
             }
 
             override fun onAnimationCancel(animation: Animator) {}

@@ -1,14 +1,17 @@
 package com.example.thuchiapp.views.splash
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieDrawable
+import com.example.thuchiapp.MainActivity
 import com.example.thuchiapp.R
 import com.example.thuchiapp.adapter.ConsumerCategoryAdapter
 import com.example.thuchiapp.adapter.MoneySpinnerAdapter
@@ -16,11 +19,13 @@ import com.example.thuchiapp.data.NameMoneyItem
 import com.example.thuchiapp.databinding.ActivityPendingJarsStartBinding
 import com.example.thuchiapp.entity.PendingJars
 import com.example.thuchiapp.utilities.OnAmountChangeListener
+import com.example.thuchiapp.utilities.PreferencesHelper
 import com.example.thuchiapp.viewModel.PendingJarsAmountViewModel
 import com.example.thuchiapp.viewModel.PendingJarsViewModel
 import com.example.thuchiapp.viewModel.PendingJarsViewModelFactory
 import com.example.thuchiapp.views.component.KeyBoardBottomSheetFragment
 import com.example.thuchiapp.views.customs.AnimationUtils
+import com.tapadoo.alerter.Alerter
 import java.text.DecimalFormat
 
 class PendingJarsStartActivity : AppCompatActivity(),
@@ -66,7 +71,13 @@ class PendingJarsStartActivity : AppCompatActivity(),
             updatedPendingJars?.let {
                 listPendingJars.clear()
                 listPendingJars.addAll(it)
-                val adapter = ConsumerCategoryAdapter(it, totalWithoutDots, language, this, pendingJarsAmountViewModel) // Truyền thêm ViewModel
+                val adapter = ConsumerCategoryAdapter(
+                    it,
+                    totalWithoutDots,
+                    language,
+                    this,
+                    pendingJarsAmountViewModel
+                ) // Truyền thêm ViewModel
                 recyclerView.adapter = adapter
             }
         }
@@ -100,7 +111,32 @@ class PendingJarsStartActivity : AppCompatActivity(),
     }
 
     private fun setDataToServer() {
-        Log.d("Hieu604", "$total $listPendingJars")
+        pendingJarsViewModel.updatePendingJars(listPendingJars).observe(this) { result ->
+            if (result) {
+                PreferencesHelper.saveTotalToPreferences(this, total)
+                Alerter.create(this)
+                    .setTitle("Thành công!")
+                    .setText("Thêm thành công số dự chi tháng!")
+                    .setBackgroundColorRes(R.color.teal_200)
+                    .setIcon(R.drawable.ic_success_32)
+                    .setDuration(600) // 1 giây
+                    .setOnHideListener {
+                        val intent = Intent(this@PendingJarsStartActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                    .show()
+
+            } else {
+                Alerter.create(this)
+                    .setTitle("Thất bại!")
+                    .setText("Thất bại trong quá trình lưu data xin thử lại!")
+                    .setBackgroundColorRes(R.color.red)
+                    .setIcon(R.drawable.ic_cloud_cross_30)
+                    .setDuration(600)
+                    .show()
+            }
+        }
     }
 
     private fun setupLottieAnimation() {
@@ -151,7 +187,12 @@ class PendingJarsStartActivity : AppCompatActivity(),
         }
     }
 
-    override fun onAmountUpdated(position: Int, percent: Int, newAmount: String, changePart: Double) {
+    override fun onAmountUpdated(
+        position: Int,
+        percent: Int,
+        newAmount: String,
+        changePart: Double
+    ) {
         listPendingJars[position].percent = percent
         listPendingJars[position].amount = newAmount
         val totalWithoutDots = total.replace(".", "")

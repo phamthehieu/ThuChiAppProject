@@ -85,20 +85,16 @@ class ConsumerCategoryAdapter(
 
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                     val progress = seekBar?.progress ?: coreValuesSeekBar
-                    Log.d("Hieu604", "Progress: $progress")
-
                     // Nếu progress đạt 100, đặt lại progress về coreValuesSeekBar
-                    if (progress == 100) {
-                        seekBar?.progress = coreValuesSeekBar
-                        seekBar?.invalidate() // Ép buộc cập nhật lại giao diện
-                        Log.d("Hieu604", "Progress set to coreValuesSeekBar: $coreValuesSeekBar")
+                    if (progress == 100 || progress ==  0) {
+                        if (previousAmount > 0) {
+                            seekBar?.progress = coreValuesSeekBar
+                            seekBar?.invalidate()
+                        }
                     } else {
-                        // Nếu không, cập nhật giá trị mới vào ViewModel và tiếp tục cộng dồn
-                        val newAmount = (progress * total.toDouble() / 100).toString()
-                        viewModel.updatePercentAtPosition(position, newAmount.toDouble())
+                        viewModel.updatePercentAtPosition(position, previousAmount)
                     }
 
-                    // Cập nhật lại giá trị previousProgress và previousAmount để tiếp tục cộng dồn
                     previousProgress = seekBar?.progress ?: coreValuesSeekBar
                     previousAmount = pendingJar.amount.toDoubleOrNull() ?: 0.0
                 }
